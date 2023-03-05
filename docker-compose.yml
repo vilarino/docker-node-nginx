@@ -1,0 +1,49 @@
+version: '3.6'
+
+services:
+  nginx: 
+    build: 
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: nginx
+    restart: always
+    tty: true
+    ports:
+      - "8080:80"
+    networks:
+      - app-net
+
+  node:
+    build: 
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: node-app
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh node index.js
+    restart: always
+    tty: true
+    volumes:
+      - ./node:/home/node/app
+    depends_on:
+      - db
+    networks:
+      - app-net
+
+  db:
+    image: mysql:5.7
+    command: --innodb-use-native-aio=0
+    container_name: db
+    restart: always
+    tty: true
+    volumes:
+      # - ./mysql:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - MYSQL_DATABASE=fullcycledb
+      - MYSQL_ROOT_PASSWORD=fullcyclepass
+    networks:
+      - app-net
+
+
+networks:
+  app-net:
+    driver: bridge
