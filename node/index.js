@@ -9,9 +9,9 @@ const config = {
 }
 
 const mysql = require('mysql')
-const connection = mysql.createConnection(config)
 
 app.get('/', (req, res) => {
+    const connection = mysql.createConnection(config)
     const sql = `SELECT * FROM people`
     connection.query(sql, (err, rows) => {
          
@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
         }
 
         res.send(`
-            <h1> Full Cycle tdd</h1> 
+            <h1> Full Cycle</h1> 
             <h2> Usuários </h2>
             <ul>
                 ${rows.map(row => 

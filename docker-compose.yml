@@ -35,8 +35,8 @@ services:
     restart: always
     tty: true
     volumes:
-      # - ./mysql:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/scripts/:/docker-entrypoint-initdb.d/
     environment:
       - MYSQL_DATABASE=fullcycledb
       - MYSQL_ROOT_PASSWORD=fullcyclepass
