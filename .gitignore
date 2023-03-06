@@ -1,5 +1,2 @@
+/node/node_modules
 /mysql/data
-/node
-/node/index.js
-/node/Dockefile
-/node/*.json

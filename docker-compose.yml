@@ -15,12 +15,13 @@ services:
 
   node:
     image: rovilarino/node:app-node
+    # build: 
+    #   context: ./node
+    #   dockerfile: Dockerfile
     container_name: node-app
-    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh node index.js
+    command: node index.js;
     restart: always
     tty: true
-    depends_on:
-      - db
     networks:
       - app-net
 
@@ -32,7 +33,6 @@ services:
     tty: true
     volumes:
       - ./mysql/data:/var/lib/mysql
-      - ./mysql/scripts/:/docker-entrypoint-initdb.d/
     environment:
       - MYSQL_DATABASE=fullcycledb
       - MYSQL_ROOT_PASSWORD=fullcyclepass
