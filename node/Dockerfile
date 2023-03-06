@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:16 as builder
 
 WORKDIR /home/node/app
 
@@ -11,10 +11,10 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm install && npm cache clean --force
 
-COPY . .
+COPY --chown=node:node . .
+
+USER node
 
 EXPOSE 3000
-
-# CMD ["node", "index.js"]
